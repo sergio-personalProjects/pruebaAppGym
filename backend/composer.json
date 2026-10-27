@@ -1,0 +1,8 @@
+{
+  "name": "tuapp-plus/backend",
+  "description": "TUAPP+ PHP API",
+  "type": "project",
+  "require": {
+    "php": "^8.3"
+  }
+}
