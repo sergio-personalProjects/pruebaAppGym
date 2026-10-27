@@ -1,0 +1,451 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif; }
+  body { @apply m-0 bg-[#f5f5f7] text-[#1d1d1f] antialiased; }
+  * { box-sizing: border-box; }
+  button, input, select { font: inherit; }
+}
+
+@layer components {
+  .brand {
+    @apply text-[25px] font-semibold tracking-[-0.065em] text-[#1d1d1f] transition-opacity duration-200 hover:opacity-65;
+  }
+  .brand span {
+    @apply inline-block transition-transform duration-300 group-hover:translate-x-1 group-hover:rotate-2;
+  }
+  .main-nav {
+    @apply flex min-w-max items-center gap-7 overflow-x-auto border-t border-black/[0.05];
+    scrollbar-width: none;
+  }
+  .main-nav::-webkit-scrollbar { display: none; }
+  .nav-link {
+    @apply relative flex h-12 shrink-0 items-center border-b-2 border-transparent text-[13px] font-medium text-black/35 transition-colors duration-200 hover:text-black;
+  }
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-[-2px] left-0 h-[2px] w-0 bg-[#1d1d1f] transition-all duration-200;
+  }
+  .nav-link:hover::after,
+  .nav-link-active::after { @apply w-full; }
+  .nav-link-active { @apply text-[#1d1d1f]; }
+
+  .glass {
+    @apply border border-black/[0.07] bg-white/80 shadow-[0_12px_40px_rgba(0,0,0,0.055)] backdrop-blur-xl;
+  }
+  .card { @apply glass rounded-[26px]; }
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-2xl border border-[#1d1d1f] bg-[#1d1d1f] px-5 py-2.5 text-sm font-medium text-white shadow-[0_5px_14px_rgba(0,0,0,.10)] transition duration-200 hover:-translate-y-0.5 hover:bg-black hover:shadow-[0_8px_20px_rgba(0,0,0,.14)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-2xl border border-black/[0.15] bg-white/90 px-5 py-2.5 text-sm font-medium text-[#1d1d1f] shadow-[0_2px_8px_rgba(0,0,0,.035)] transition duration-200 hover:-translate-y-0.5 hover:border-black/[0.30] hover:bg-white hover:shadow-[0_5px_14px_rgba(0,0,0,.07)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-45;
+  }
+  .input {
+    @apply w-full rounded-2xl border border-black/[0.13] bg-white px-4 py-3 outline-none transition placeholder:text-black/30 focus:border-black/35 focus:ring-4 focus:ring-black/5;
+  }
+  .metric-tile { @apply flex min-h-[78px] flex-col justify-center rounded-2xl border border-black/[0.08] bg-white/75 px-3 py-3; }
+  .metric-tile span { @apply text-[10px] font-semibold uppercase tracking-[0.08em] text-black/35; }
+  .metric-tile strong { @apply mt-1 text-xl font-semibold tracking-[-0.025em]; }
+  .metric-tile small { @apply text-[10px] text-black/35; }
+  .section-badge { @apply rounded-full border border-black/[0.10] bg-black/[0.025] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-black/40; }
+  .exercise-chip { @apply rounded-full border border-black/[0.09] bg-white px-3 py-1.5 text-xs font-medium text-black/60; }
+  .status-dot { @apply inline-block h-2 w-2 rounded-full bg-[#1d1d1f] shadow-[0_0_0_4px_rgba(29,29,31,.08)]; }
+  .dashboard-workout-row { @apply flex w-full items-center justify-between gap-4 px-6 py-5 text-left transition duration-200 hover:bg-black/[0.025] sm:px-7; }
+  .section-filter { @apply rounded-xl border border-black/[0.13] bg-white px-3 py-2 text-xs font-semibold text-black/55 outline-none transition focus:border-black/30 focus:ring-4 focus:ring-black/5; }
+}
+
+::-webkit-scrollbar { width: 9px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 999px; }
+
+@layer components {
+  .today-summary {
+    @apply grid grid-cols-2 overflow-hidden rounded-2xl border border-black/[0.08] bg-black/[0.025];
+  }
+  .today-summary > div {
+    @apply min-w-[110px] px-4 py-3;
+  }
+  .today-summary > div + div {
+    @apply border-l border-black/[0.07];
+  }
+  .today-summary span,
+  .workout-list-stats span,
+  .history-stats span {
+    @apply block text-[10px] font-semibold uppercase tracking-[0.08em] text-black/35;
+  }
+  .today-summary strong {
+    @apply mt-1 block text-base font-semibold tracking-[-0.02em];
+  }
+
+  .workout-list-item {
+    @apply flex w-full items-center gap-3 rounded-2xl border border-transparent px-3 py-4 text-left transition duration-200 hover:border-black/[0.07] hover:bg-black/[0.025] sm:gap-4 sm:px-4;
+  }
+  .workout-list-item + .workout-list-item {
+    @apply mt-1;
+  }
+  .workout-list-index {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black/[0.09] bg-white text-sm font-semibold shadow-[0_2px_7px_rgba(0,0,0,.025)];
+  }
+  .workout-list-stats,
+  .history-stats {
+    @apply hidden shrink-0 items-center gap-6 text-right lg:flex;
+  }
+  .workout-list-stats > div,
+  .history-stats > div {
+    @apply min-w-[74px] flex-col items-end;
+  }
+  .workout-list-stats strong,
+  .history-stats strong {
+    @apply block text-sm font-semibold tracking-[-0.01em];
+  }
+  .workout-chevron {
+    @apply shrink-0 text-xl leading-none text-black/25 transition-transform duration-200;
+  }
+
+  .history-list-item {
+    @apply flex w-full items-center gap-3 rounded-2xl border border-transparent px-3 py-4 text-left transition duration-200 hover:border-black/[0.07] hover:bg-black/[0.025] sm:gap-4 sm:px-4;
+  }
+  .history-list-item + .history-list-item {
+    @apply mt-1;
+  }
+  .history-number {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-black/[0.08] bg-black/[0.025] text-xs font-semibold text-black/50;
+  }
+}
+
+
+/* Dashboard v6 - filas de entrenamiento */
+.workout-list-item, .history-list-item {
+  width: 100%;
+  display: flex;
+}
+
+
+/* Dashboard v7 - histórico agrupado por fecha */
+@layer components {
+  .history-date-toggle {
+    @apply flex w-full items-center justify-between gap-5 px-6 py-4 text-left transition duration-200 hover:bg-black/[0.025] sm:px-7;
+  }
+  .history-date-main {
+    @apply flex min-w-0 items-center gap-4;
+  }
+  .history-date-icon {
+    @apply flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-2xl border border-black/[0.08] bg-black/[0.025] leading-none;
+  }
+  .history-date-icon strong {
+    @apply mt-1 text-lg font-semibold tracking-[-0.03em];
+  }
+  .history-date-chevron {
+    @apply flex h-8 w-8 items-center justify-center rounded-full border border-black/[0.08] bg-white text-base text-black/40 transition-transform duration-200;
+  }
+  .history-date-chevron-open {
+    @apply rotate-180;
+  }
+  .history-date-content {
+    @apply border-t border-black/[0.05] bg-black/[0.012] px-3 py-2 sm:px-4;
+  }
+}
+
+
+/* Dashboard v8 - histórico agrupado por fecha con el mismo patrón visual que "Entrenamiento de hoy" */
+@layer components {
+  .history-date-group + .history-date-group {
+    @apply border-t border-black/[0.06];
+  }
+
+  .history-date-row {
+    @apply flex w-full items-center justify-between gap-5 px-6 py-5 text-left transition duration-200 hover:bg-black/[0.025] sm:px-7;
+  }
+
+  .history-date-row-main {
+    @apply flex min-w-0 items-center gap-4;
+  }
+
+  .history-date-calendar {
+    @apply flex h-[54px] w-[54px] shrink-0 flex-col items-center justify-center rounded-2xl border border-black/[0.09] bg-black/[0.025] leading-none;
+  }
+
+  .history-date-calendar span {
+    @apply text-[9px] font-semibold uppercase tracking-[0.08em] text-black/35;
+  }
+
+  .history-date-calendar strong {
+    @apply mt-1 text-xl font-semibold tracking-[-0.035em];
+  }
+
+  .history-date-row-action {
+    @apply flex shrink-0 items-center gap-3;
+  }
+
+  .history-date-chevron {
+    @apply flex h-9 w-9 items-center justify-center rounded-full border border-black/[0.09] bg-white text-base text-black/45 transition-transform duration-200;
+  }
+
+  .history-date-chevron-open {
+    @apply rotate-180;
+  }
+
+  .history-date-workouts {
+    @apply border-t border-black/[0.05] bg-black/[0.012] px-3 py-2 sm:px-4;
+  }
+
+  .history-workout-row {
+    @apply rounded-2xl;
+  }
+
+  .history-workout-row + .history-workout-row {
+    @apply mt-1;
+  }
+}
+
+
+/* Dashboard v9 - filas de fecha siguiendo el patrón visual de "Entrenamiento de hoy" */
+@layer components {
+  .history-day-row {
+    @apply flex w-full items-center gap-5 px-6 py-5 text-left transition duration-200 hover:bg-black/[0.025] sm:px-7;
+  }
+
+  .history-day-number {
+    @apply flex h-11 w-11 shrink-0 flex-col items-center justify-center rounded-xl border border-black/[0.09] bg-black/[0.025] leading-none;
+  }
+
+  .history-day-number span {
+    @apply text-[8px] font-semibold uppercase tracking-[0.08em] text-black/35;
+  }
+
+  .history-day-number strong {
+    @apply mt-1 text-sm font-semibold tracking-[-0.02em] text-black/55;
+  }
+
+  .history-day-stat {
+    @apply hidden shrink-0 text-right sm:block;
+  }
+
+  .history-day-stat strong {
+    @apply block text-sm font-semibold;
+  }
+
+  .history-day-stat span {
+    @apply mt-1 block text-[10px] font-semibold uppercase tracking-[0.08em] text-black/35;
+  }
+
+  .history-day-chevron {
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-black/[0.09] bg-white text-xl leading-none text-black/35 transition-transform duration-200;
+  }
+
+  .history-day-chevron-open {
+    @apply rotate-90;
+  }
+
+  .history-date-workouts {
+    @apply border-t border-black/[0.05] bg-black/[0.012] px-3 py-3 sm:px-4;
+  }
+
+  .history-workout-row {
+    @apply rounded-2xl;
+  }
+
+  .history-workout-row + .history-workout-row {
+    @apply mt-1;
+  }
+}
+
+/* Dashboard v10 - histórico: estructura robusta y espaciosa */
+.history-day-row {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  padding: 20px 28px !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+  cursor: pointer;
+}
+
+.history-day-number {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  border: 1px solid rgba(0,0,0,.09) !important;
+  border-radius: 12px !important;
+  background: rgba(0,0,0,.025) !important;
+  line-height: 1 !important;
+}
+
+.history-day-number span {
+  display: block !important;
+  font-size: 8px !important;
+  font-weight: 600 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: rgba(0,0,0,.35) !important;
+}
+
+.history-day-number strong {
+  display: block !important;
+  margin-top: 4px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: rgba(0,0,0,.55) !important;
+}
+
+.history-day-row > .min-w-0 {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  text-align: left !important;
+}
+
+.history-day-stat {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  min-width: 105px !important;
+  text-align: right !important;
+}
+
+.history-day-stat strong {
+  display: block !important;
+  font-size: 15px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+}
+
+.history-day-stat span {
+  display: block !important;
+  margin-top: 5px !important;
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: rgba(0,0,0,.35) !important;
+}
+
+.history-day-chevron {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  border: 1px solid rgba(0,0,0,.09) !important;
+  border-radius: 999px !important;
+  background: white !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+  color: rgba(0,0,0,.35) !important;
+}
+
+.history-date-workouts {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  padding: 12px 16px !important;
+  border-top: 1px solid rgba(0,0,0,.05) !important;
+  background: rgba(0,0,0,.012) !important;
+  box-sizing: border-box !important;
+}
+
+.history-date-workouts .history-workout-row,
+.history-date-workouts .dashboard-workout-row {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 20px !important;
+  margin: 0 !important;
+  padding: 20px 28px !important;
+  box-sizing: border-box !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  text-align: left !important;
+}
+
+.history-date-workouts .workout-list-index {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.history-date-workouts .history-workout-row > .min-w-0 {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+.history-date-workouts .workout-list-stats {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 28px !important;
+  flex: 0 0 auto !important;
+  text-align: right !important;
+}
+
+.history-date-workouts .workout-list-stats > div {
+  min-width: 74px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+}
+
+.history-date-workouts .workout-list-stats strong {
+  display: block !important;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+}
+
+.history-date-workouts .workout-list-stats span {
+  display: block !important;
+  margin-top: 5px !important;
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: rgba(0,0,0,.35) !important;
+}
+
+.history-date-workouts .workout-chevron {
+  flex: 0 0 auto !important;
+}
+
+@media (max-width: 767px) {
+  .history-day-row {
+    gap: 14px !important;
+    padding: 18px 20px !important;
+  }
+
+  .history-day-stat {
+    min-width: 82px !important;
+  }
+
+  .history-date-workouts {
+    padding: 8px !important;
+  }
+
+  .history-date-workouts .history-workout-row,
+  .history-date-workouts .dashboard-workout-row {
+    gap: 12px !important;
+    padding: 17px 14px !important;
+  }
+
+  .history-date-workouts .workout-list-stats {
+    display: none !important;
+  }
+}
