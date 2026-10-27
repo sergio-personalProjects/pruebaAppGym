@@ -1,0 +1,63 @@
+services:
+  db:
+    image: mariadb:11.4
+    container_name: tuapp-db
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: tuapp
+      MARIADB_USER: tuapp
+      MARIADB_PASSWORD: tuapp_secret
+      MARIADB_ROOT_PASSWORD: root123456
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./backend/database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build: ./backend
+    container_name: tuapp-backend
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: tuapp
+      DB_USER: tuapp
+      DB_PASSWORD: tuapp_secret
+      APP_ORIGIN: http://192.168.1.19:4200
+      SESSION_NAME: TUAPPSESSID
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+
+  frontend:
+    build: ./frontend
+    container_name: tuapp-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+  phpmyadmin:
+    image: phpmyadmin:5.2-apache
+    container_name: tuapp-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 0
+      UPLOAD_LIMIT: 64M
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8081:80"
+
+volumes:
+  mariadb_data:
