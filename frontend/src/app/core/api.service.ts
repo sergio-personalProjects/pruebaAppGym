@@ -18,8 +18,7 @@ export class ApiService {
 
   private readonly http = inject(HttpClient);
 
-  private readonly base =
-    `${window.location.protocol}//${window.location.hostname}:8080/api`;
+  private readonly base = '/api';
 
   login(
     email: string,
