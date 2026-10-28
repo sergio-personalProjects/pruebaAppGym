@@ -13,11 +13,12 @@ import { RouterLink } from '@angular/router';
       <div class="mx-auto flex min-h-[calc(100vh-5rem)] max-w-md items-center">
         <section class="card w-full p-8 sm:p-10">
           <div class="mb-10">
-            <img
+            <!--<img
   src="assets/gymgadget-logo.png"
   alt="GymGadget"
   class="mb-5 h-12 w-auto object-contain object-left"
-/>
+/>-->
+            <div class="mb-5 text-3xl font-semibold tracking-[-0.06em]">TUAPP<span>+</span></div>
             <h1 class="text-3xl font-semibold tracking-[-0.04em]">Tu entrenamiento, claro.</h1>
             <p class="mt-3 text-sm leading-6 text-black/50">Registra tus sesiones y descubre cómo evoluciona tu rendimiento.</p>
           </div>
