@@ -22,11 +22,12 @@ import { AuthService } from '../core/auth.service';
   aria-label="GymGadget inicio"
   (click)="closeMenu()"
 >
-  <img
+  <!--<img
     src="assets/gymgadget-logo.png"
     alt="GymGadget"
     class="h-10 w-auto object-contain"
-  />
+  />-->
+  <div class="mb-5 text-3xl font-semibold tracking-[-0.06em]">TUAPP<span>+</span></div>
 </a>
 
           <div class="flex min-w-0 items-center gap-3">
