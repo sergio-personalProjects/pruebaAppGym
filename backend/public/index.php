@@ -1495,11 +1495,6 @@ try {
             (int)$u['id'];
 
 
-        seedDemoData(
-            (int)$u['id']
-        );
-
-
         response([
             'user' => [
 
