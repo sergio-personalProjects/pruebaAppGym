@@ -28,10 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 session_name(getenv('SESSION_NAME') ?: 'TUAPPSESSID');
 
+$secureCookie = filter_var(
+    getenv('SESSION_COOKIE_SECURE') ?: 'false',
+    FILTER_VALIDATE_BOOLEAN
+);
+
 session_set_cookie_params([
     'httponly' => true,
     'samesite' => 'Lax',
-    'secure' => false
+    'secure' => $secureCookie
 ]);
 
 session_start();
