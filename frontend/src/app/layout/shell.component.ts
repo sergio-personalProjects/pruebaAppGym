@@ -1,3 +1,4 @@
+
 import { Component, inject } from '@angular/core';
 import {
   RouterLink,
@@ -10,25 +11,25 @@ import { AuthService } from '../core/auth.service';
   standalone: true,
   imports: [RouterLink, RouterLinkActive, RouterOutlet],
   template: `
-    <div class="min-h-screen">
+    <div class="flex min-h-screen flex-col">
 
       <header
         class="sticky top-0 z-30 border-b border-black/[0.07] bg-[#f5f5f7]/90 backdrop-blur-2xl"
       >
         <div class="mx-auto flex max-w-7xl items-center justify-between gap-5 px-5 py-4 lg:px-8">
           <a
-  routerLink="/resumen"
-  class="brand group flex shrink-0 select-none items-center"
-  aria-label="GymGadget inicio"
-  (click)="closeMenu()"
->
-  <!--<img
-    src="assets/gymgadget-logo.png"
-    alt="GymGadget"
-    class="h-10 w-auto object-contain"
-  />-->
-  <div class="mb-5 text-3xl font-semibold tracking-[-0.06em]">TUAPP<span>+</span></div>
-</a>
+            routerLink="/resumen"
+            class="brand group flex shrink-0 select-none items-center"
+            aria-label="GymGadget inicio"
+            (click)="closeMenu()"
+          >
+            <!--<img
+              src="assets/gymgadget-logo.png"
+              alt="GymGadget"
+              class="h-10 w-auto object-contain"
+            />-->
+            <div class="mb-5 text-3xl font-semibold tracking-[-0.06em]">TUAPP<span>+</span></div>
+          </a>
 
           <div class="flex min-w-0 items-center gap-3">
             <span class="hidden truncate rounded-full border border-black/[0.08] bg-white/75 px-3 py-1.5 text-sm text-black/55 sm:inline-block">
@@ -120,9 +121,19 @@ import { AuthService } from '../core/auth.service';
         }
       </header>
 
-      <main class="mx-auto max-w-7xl px-5 py-8 lg:px-8 lg:py-10">
+      <main class="mx-auto w-full max-w-7xl flex-1 px-5 py-8 lg:px-8 lg:py-10">
         <router-outlet />
       </main>
+
+      <footer class="border-t border-black/[0.07] bg-[#f5f5f7] px-5 py-6 text-center">
+        <p class="text-sm font-semibold tracking-[0.12em] text-black/75">
+          SERGIO H
+        </p>
+        <p class="mt-1 text-xs tracking-wide text-black/45">
+          COPYRIGHT © 2026
+        </p>
+      </footer>
+
     </div>
   `,
   styles: [`
