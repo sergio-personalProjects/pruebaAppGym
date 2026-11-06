@@ -954,27 +954,33 @@ function seedDemoData(
 */
 
 function workoutById(
-    int $workoutId
+    int $workoutId,
+    int $userId
 ): ?array {
 
     $pdo = db();
 
 
     $stmt = $pdo->prepare("
-        SELECT
-            id,
-            started_at,
-            duration_seconds
+    SELECT
+        id,
+        started_at,
+        duration_seconds
 
-        FROM workouts
+    FROM workouts
 
-        WHERE id = ?
-    ");
+    WHERE
+        id = ?
+        AND user_id = ?
+
+    LIMIT 1
+");
 
 
-    $stmt->execute([
-        $workoutId
-    ]);
+$stmt->execute([
+    $workoutId,
+    $userId
+]);
 
 
     $base =
@@ -2712,9 +2718,7 @@ try {
         response([
             'workout' =>
                 $id
-                    ? workoutById(
-                        (int)$id
-                    )
+                    ? workoutById((int)$id, $uid)
                     : null
         ]);
 
@@ -2841,9 +2845,7 @@ try {
 
         response([
             'workout' =>
-                workoutById(
-                    $workoutId
-                )
+                workoutById($workoutId, $uid)
         ]);
 
     }
@@ -3093,9 +3095,7 @@ try {
         ) {
 
             $workout =
-                workoutById(
-                    (int)$id
-                );
+               workoutById((int)$id, $uid);
 
 
             if (!$workout) {
@@ -3315,9 +3315,7 @@ try {
         ) {
 
             $workout =
-                workoutById(
-                    (int)$id
-                );
+                workoutById((int)$id, $uid);
 
 
             if ($workout) {
