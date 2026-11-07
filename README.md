@@ -1,78 +1,52 @@
 # TUAPP+
 
-Aplicación de seguimiento de entrenamientos con Angular + Tailwind CSS en frontend y PHP + MariaDB en backend, ejecutada con Docker Compose.
+TUAPP+ es una aplicación web para registrar entrenamientos de fuerza, consultar el historial y seguir la evolución del volumen de entrenamiento. Permite elegir ejercicios de una biblioteca o preparar rutinas reutilizables mediante planes personalizados.
 
-## Servicios
+## Acceso a la aplicación
 
-- TUAPP+: http://localhost:4200
-- API: http://localhost:8080/api/health
-- phpMyAdmin: http://localhost:8081
-- MariaDB: accesible internamente desde Docker como `db:3306` (no se publica el puerto 3306 en el host).
+Una vez abierta la aplicación:
 
-## phpMyAdmin
+1. Selecciona **Registrarse** en la pantalla de inicio de sesión.
+2. Introduce tu nombre, email y una contraseña de al menos 8 caracteres; confirma la contraseña y crea la cuenta.
+3. Al iniciar sesión accederás al resumen. Desde la navegación puedes abrir **Entrenamiento anterior**, **Registrar entrenamiento**, **Planes Workouts** y **Ejercicios**.
+4. Usa **Salir** para cerrar la sesión.
 
-Puedes gestionar la base de datos desde phpMyAdmin sin cambiar MariaDB por MySQL. phpMyAdmin es compatible con MariaDB.
+Las cuentas y los entrenamientos pertenecen a cada usuario. Para proteger tus datos, utiliza una contraseña propia y no compartas tus credenciales.
 
-Datos:
+## Funcionalidades
 
-- Servidor: `db`
-- Usuario de aplicación: `tuapp`
-- Contraseña: `tuapp_secret`
-- Base de datos: `tuapp`
+### Resumen y progreso
 
-Para administración completa también puedes usar:
+- Consulta las sesiones registradas durante el día, su duración y el volumen movido.
+- Revisa el historial de entrenamientos, agrupado por fecha, y abre una sesión para ver sus detalles.
+- Consulta gráficos de progreso, incluidos el volumen por día y las repeticiones por ejercicio y día.
 
-- Usuario: `root`
-- Contraseña: `root_secret_change_me`
+### Registrar un entrenamiento
 
-## Modelo de datos simplificado
+1. Abre **Registrar entrenamiento**.
+2. Elige añadir ejercicios manualmente o cargar uno de tus planes guardados.
+3. Selecciona los ejercicios y registra, para cada serie, el peso en kilogramos y las repeticiones.
+4. Utiliza el temporizador de la sesión y guarda el entrenamiento al terminar.
 
-La base de datos utiliza cuatro tablas principales:
+Al seleccionar un ejercicio, la pantalla muestra el último registro disponible de ese ejercicio para que puedas consultarlo como referencia. Las sesiones guardadas aparecen en el resumen y en el historial.
 
-- `users`: usuarios.
-- `exercises`: catálogo de ejercicios.
-- `workouts`: una fila por sesión de entrenamiento.
-- `workout_sets`: cada serie realizada, enlazando directamente la sesión con el ejercicio.
+### Planes personalizados
 
-Se eliminó la tabla intermedia `workout_exercises`. Ahora la relación es mucho más fácil de entender desde phpMyAdmin:
+En **Planes Workouts** puedes crear rutinas con un nombre y una selección ordenada de ejercicios. También puedes editar o eliminar los planes guardados. El plan guarda los ejercicios, no las series, el peso ni las repeticiones: esos datos se añaden al registrar cada sesión. Al elegir un plan en el formulario de entrenamiento, se cargan automáticamente sus ejercicios.
 
-`users → workouts → workout_sets ← exercises`
+### Biblioteca de ejercicios
 
-`workout_sets` contiene `workout_id`, `exercise_id`, `exercise_order`, `set_number`, `weight_kg` y `repetitions`.
+En **Ejercicios** puedes explorar el catálogo, organizado por grupo muscular: pecho, hombro, espalda, pierna, bíceps y tríceps. Los ejercicios incluyen una breve descripción e ilustración.
 
-### Migración automática
+### Entrenamiento anterior
 
-Si ya tienes una base de datos de una versión anterior con `workout_exercises`, el backend detecta ese esquema y migra automáticamente los datos al modelo simplificado al realizar la primera petición. No es necesario borrar el volumen para conservar los entrenamientos existentes.
+Esta sección muestra la sesión más reciente; si has entrenado hoy, muestra primero una sesión de hoy. Puedes consultar su fecha, hora de inicio, duración, ejercicios, series, pesos y repeticiones.
 
-## Login demo
+## Tecnologías y servicios
 
-- Email: `demo@tuapp.local`
-- Contraseña: `Demo1234!`
+- **Frontend:** Angular 20, TypeScript, Tailwind CSS y JavaScript.
+- **API y lógica de servidor:** PHP 8.3 sobre Apache, con PDO para el acceso a datos.
+- **Base de datos:** MariaDB. Guarda las cuentas, el catálogo de ejercicios, los planes y las sesiones con sus series.
+- **Contenedores/servidores web:** hay Dockerfiles para el frontend (construcción con Node.js 22 y publicación mediante Nginx) y el backend (PHP con Apache).
 
-## Arranque
-
-```powershell
-docker compose down
-docker compose up --build -d
-```
-
-No uses `docker compose down -v` si quieres conservar los datos de MariaDB.
-
-Si quieres empezar deliberadamente desde cero:
-
-```powershell
-docker compose down -v
-docker compose up --build -d
-```
-
-## Funcionalidad actual
-
-- Login con sesión PHP.
-- Dashboard con volumen por día y repeticiones por ejercicio/día.
-- Los gráficos incluyen automáticamente entrenamientos registrados durante el día actual.
-- Resumen visible del entrenamiento de hoy.
-- Página de último entrenamiento, mostrando el de hoy si existe y, si no, el último disponible.
-- Registro de entrenamientos con ejercicios agrupados por grupo muscular y series ilimitadas.
-- Catálogo de ejercicios.
-- Interfaz responsive y minimalista.
-- Navegación horizontal bajo el header con estado inactivo, hover y página activa.
+La interfaz consume la API bajo la ruta `/api`. El despliegue debe conectar esa ruta con el backend y configurar el acceso de la API a MariaDB.
